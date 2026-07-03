@@ -1,0 +1,211 @@
+<!doctype html>
+<html lang="ta">
+  <head>
+    <meta charset="UTF-8" />
+    <link rel="icon" type="image/svg+xml" href="data:image/svg+xml,<svg xmlns=%22http://www.w3.org/2000/svg%22 viewBox=%220 0 100 100%22><text y=%22.9em%22 font-size=%2290%22>📚</text></svg>" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>பத்தாம் வகுப்பு தமிழ் மாதிரி பொதுத்தேர்வு-2 (2025-2026)</title>
+    <!-- Google Fonts for premium Tamil & English typography -->
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700&family=Mukta+Malar:wght@400;500;600;700&display=swap" rel="stylesheet">
+    <link rel="stylesheet" href="style.css">
+    <!-- Confetti Library loaded dynamically if online, fallback handled natively -->
+    <script src="https://cdn.jsdelivr.net/npm/canvas-confetti@1.9.2/dist/confetti.browser.min.js"></script>
+  </head>
+  <body>
+    <div id="app">
+      <!-- 1. Dashboard / Welcome Screen -->
+      <div id="dashboard-view" class="view-panel">
+        <div class="dashboard-hero glass-panel">
+          <div class="hero-glow"></div>
+          <span class="q-badge tamil-text" style="margin-bottom: 16px; display: inline-block;">
+            பொதுத்தேர்வு தயாரிப்பு (Exam Preparation)
+          </span>
+          <h1 id="exam-title-lbl" class="hero-title tamil-text">மாதிரி பொதுத்தேர்வு-2 (2025-2026)</h1>
+          <p id="exam-meta-lbl" class="hero-subtitle tamil-text">
+            10. ஆம் வகுப்பு தமிழ் | மொத்த மதிப்பெண்கள்: 100 | நேரம்: 3.00 மணி
+          </p>
+
+          <div class="mode-selection">
+            <div id="mode-practice" class="mode-card glass-panel active-mode" onclick="setMode('practice')">
+              <h3 class="tamil-text">📖 பயிற்சி முறை (Practice Mode)</h3>
+              <p class="tamil-text">நேர வரம்பு இல்லை. ஒவ்வொரு வினாவிற்கும் உடனடி விடை மற்றும் விளக்கங்களைப் பெறலாம். குறிப்புகளைப் பயன்படுத்திக் கற்கலாம்.</p>
+            </div>
+
+            <div id="mode-exam" class="mode-card glass-panel" onclick="setMode('exam')">
+              <h3 class="tamil-text">⏱️ தேர்வு முறை (Exam Mode)</h3>
+              <p class="tamil-text">உண்மையான பொதுத்தேர்வு போன்ற சூழல். 3 மணி 15 நிமிட நேரக் கணக்கீடு, இறுதி மதிப்பீடு மற்றும் மதிப்பெண் அறிக்கை வழங்கப்படும்.</p>
+            </div>
+          </div>
+
+          <div style="margin-top: 32px;">
+            <button class="btn btn-gold tamil-text" style="padding: 16px 36px; font-size: 1.15rem;" onclick="startQuiz()">
+              தேர்வைத் தொடங்கு (Start Quiz)
+            </button>
+          </div>
+        </div>
+
+        <div class="grid-2" style="margin-top: 32px;">
+          <div class="info-card glass-panel">
+            <h3 class="tamil-text">🏆 தேர்வின் வடிவமைப்பு (Exam Structure)</h3>
+            <ul>
+              <li class="tamil-text"><strong>பகுதி - I:</strong> 15 ஒரு மதிப்பெண் பலவுள் தெரிவு வினாக்கள் (MCQs).</li>
+              <li class="tamil-text"><strong>பகுதி - II:</strong> இரண்டு மதிப்பெண் வினாக்கள் (குறுவினாக்கள்).</li>
+              <li class="tamil-text"><strong>பகுதி - III:</strong> மூன்று மதிப்பெண் வினாக்கள் (சிறுவினாக்கள், அலகிடுதல்).</li>
+              <li class="tamil-text"><strong>பகுதி - IV:</strong> ஐந்து மதிப்பெண் வினாக்கள் (படிவம், மொழிபெயர்ப்பு, கடிதம்).</li>
+              <li class="tamil-text"><strong>பகுதி - V:</strong> எட்டு மதிப்பெண் நெடுவினாக்கள் (கட்டுரை வடிவம்).</li>
+            </ul>
+          </div>
+
+          <div class="info-card glass-panel">
+            <h3 class="tamil-text">📋 அறிவுறுத்தல்கள் (Instructions)</h3>
+            <ul id="instructions-list">
+              <!-- Dynamically populated -->
+            </ul>
+          </div>
+        </div>
+      </div>
+
+      <!-- 2. Main Quiz Container (Sidebar + Content Card) -->
+      <div id="quiz-view" class="view-panel app-container" style="display: none;">
+        <!-- Sidebar -->
+        <aside class="sidebar">
+          <h2 class="sidebar-title tamil-text">📋 வினாக்கள் (Questions)</h2>
+          <ul id="sidebar-menu" class="sidebar-menu tamil-text">
+            <!-- Dynamically populated -->
+          </ul>
+          <div style="margin-top: 20px; border-top: 1px solid var(--card-border); padding-top: 16px;">
+            <button type="button" class="btn btn-primary tamil-text" style="width: 100%;" onclick="showConfirmSubmit()">
+              சமர்ப்பி (Submit)
+            </button>
+          </div>
+        </aside>
+
+        <!-- Main Panel -->
+        <main class="main-content">
+          <header class="glass-panel header-banner">
+            <div>
+              <h3 id="current-part-lbl" class="tamil-text" style="font-size: 1.2rem;">பகுதி - I</h3>
+              <p id="current-section-lbl" class="tamil-text" style="font-size: 0.85rem; color: var(--text-secondary);"></p>
+            </div>
+            
+            <div id="timer-box" class="timer-box">
+              ⏱️ <span id="timer-val" style="font-family: monospace;">00:00:00</span>
+            </div>
+          </header>
+
+          <!-- Question Card Container -->
+          <div id="question-card-container">
+            <!-- Dynamically populated by active question card -->
+          </div>
+
+          <!-- Bottom Navigation Bar -->
+          <footer class="footer-nav">
+            <button type="button" id="prev-btn" class="btn btn-secondary tamil-text" onclick="goToPrev()">
+              ⬅️ முந்தைய வினா
+            </button>
+
+            <div id="progress-indicator" style="font-size: 0.95rem; color: var(--text-secondary);">
+              1 / 45
+            </div>
+
+            <button type="button" id="next-btn" class="btn btn-primary tamil-text" onclick="goToNext()">
+              அடுத்த வினா ➡️
+            </button>
+          </footer>
+        </main>
+      </div>
+
+      <!-- 3. Confirmation Dialog -->
+      <div id="confirm-view" class="view-panel" style="display: none;">
+        <div class="glass-panel text-center animate-fadeIn" style="padding: 48px; max-width: 600px; margin: 80px auto;">
+          <h2 class="tamil-text" style="font-size: 2rem; color: var(--accent-gold); margin-bottom: 16px;">⚠️ விடைத்தாளைச் சமர்ப்பிக்கலாமா?</h2>
+          <p id="confirm-stats-lbl" class="tamil-text" style="color: var(--text-secondary); margin-bottom: 28px; line-height: 1.8;">
+            நீங்கள் 0 / 45 வினாக்களுக்குப் பதிலளித்துள்ளீர்கள்.
+          </p>
+          <div style="display: flex; gap: 16px; justify-content: center;">
+            <button type="button" class="btn btn-gold tamil-text" onclick="finishQuiz()">
+              சமர்ப்பி (Submit Answers)
+            </button>
+            <button type="button" class="btn btn-secondary tamil-text" onclick="cancelConfirmSubmit()">
+              விடைத்தாளிற்குத் திரும்பு (Back)
+            </button>
+          </div>
+        </div>
+      </div>
+
+      <!-- 4. Final Summary / Evaluation Screen -->
+      <div id="summary-view" class="view-panel" style="display: none;">
+        <div class="summary-container tamil-text">
+          <div class="glass-panel summary-score-header">
+            <span style="font-size: 3rem; margin-bottom: 12px; display: block;">🏆</span>
+            <h2 style="font-size: 2rem; margin-bottom: 8px;">தேர்வு முடிவுகள் (Exam Summary)</h2>
+            <p id="summary-mode-lbl" style="color: var(--text-secondary); margin-bottom: 24px;">
+              மதிப்பீட்டு அறிக்கை (Evaluation Sheet)
+            </p>
+
+            <div class="circular-chart-box">
+              <svg viewBox="0 0 36 36" style="width: 100%; height: 100%; transform: rotate(-90deg);">
+                <path
+                  d="M18 2.0845 a 15.9155 15.9155 0 0 1 0 31.831 a 15.9155 15.9155 0 0 1 0 -31.831"
+                  fill="none"
+                  stroke="var(--card-border)"
+                  stroke-width="2.5"
+                />
+                <path
+                  id="summary-circle-gauge"
+                  stroke-dasharray="0, 100"
+                  d="M18 2.0845 a 15.9155 15.9155 0 0 1 0 31.831 a 15.9155 15.9155 0 0 1 0 -31.831"
+                  fill="none"
+                  stroke="var(--accent-gold)"
+                  stroke-width="2.5"
+                  stroke-linecap="round"
+                  style="transition: stroke-dasharray 1s ease-in-out;"
+                />
+              </svg>
+              <div class="circular-score">
+                <span id="summary-score-num" class="num">0</span>
+                <span id="summary-score-den" class="den">/ 100</span>
+              </div>
+            </div>
+
+            <h3 id="summary-grade-title" style="color: var(--accent-gold); fontSize: 1.5rem; margin-bottom: 4px;">அதிசிறந்தது (Outstanding!)</h3>
+            <p id="summary-grade-desc" style="color: var(--text-secondary);">தமிழ் மொழியறிவில் நீங்கள் மிகச்சிறந்த திறமை பெற்றுள்ளீர்கள்.</p>
+          </div>
+
+          <div class="summary-details-grid">
+            <div class="glass-panel metric-card">
+              <span style="font-size: 1.5rem; display: block; margin-bottom: 8px;">🎯</span>
+              <div id="summary-auto-score" class="val">0 / 25</div>
+              <div class="lbl">அகவய மதிப்பீடு (Objective Score)</div>
+            </div>
+
+            <div class="glass-panel metric-card">
+              <span style="font-size: 1.5rem; display: block; margin-bottom: 8px;">✍️</span>
+              <div id="summary-self-score" class="val">0 / 75</div>
+              <div class="lbl">சுய மதிப்பீடு (Subjective Score)</div>
+            </div>
+
+            <div class="glass-panel metric-card">
+              <span style="font-size: 1.5rem; display: block; margin-bottom: 8px;">⏱️</span>
+              <div id="summary-time" class="val">0 நிமி (Min)</div>
+              <div class="lbl">எடுத்துக்கொண்ட நேரம் (Time Taken)</div>
+            </div>
+          </div>
+
+          <div style="display: flex; gap: 16px; justify-content: center; margin-top: 16px;">
+            <button type="button" class="btn btn-gold" onclick="window.print()">
+              🖨️ மதிப்பெண் அட்டை அச்சிடு (Print Score Card)
+            </button>
+            <button type="button" class="btn btn-secondary" onclick="resetQuiz()">
+              🔄 மீண்டும் பயிற்சி செய்க (Restart)
+            </button>
+          </div>
+        </div>
+      </div>
+    </div>
+    
+    <script src="app.js"></script>
+  </body>
+</html>
